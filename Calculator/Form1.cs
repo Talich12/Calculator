@@ -71,7 +71,7 @@ namespace Calculator
 
         private void button_division_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 1 && textBox2.Text[0] == '-')
+            if (!math.test(textBox2.Text))
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace Calculator
         private void button_multiplication_Click(object sender, EventArgs e)
         {
 
-            if (textBox2.Text.Length == 1 && textBox2.Text[0] == '-')
+            if (!math.test(textBox2.Text))
             {
                 return;
             }
@@ -104,7 +104,7 @@ namespace Calculator
 
         private void button_substraction_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 1 && textBox2.Text[0] == '-')
+            if (!math.test(textBox2.Text))
             {
                 return;
             }
@@ -120,7 +120,7 @@ namespace Calculator
 
         private void button_addition_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 1 && textBox2.Text[0] == '-')
+            if (!math.test(textBox2.Text))
             {
                 return;
             }
@@ -136,35 +136,36 @@ namespace Calculator
 
         private void button_equality_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length != 0)
+            if (textBox2.Text.Length == 0 || !math.test(textBox2.Text))
             {
-                if (DataBank.code == -1 || DataBank.code == 0)
-                {
-                    DataBank.a = Convert.ToDouble(textBox2.Text);
-                    textBox1.Text = Convert.ToString(DataBank.a);
-                    DataBank.code = 0;
-                    textBox2.Text = "";
-                    DataBank.IsRealNumber = false;
-                    DataBank.IsSqrt = false;
-                    DataBank.IsNegative = false;
-                }
-                else
-                {
-                    DataBank.b = Convert.ToDouble(textBox2.Text);
-                    textBox1.Text = Convert.ToString(math.action(DataBank.a, DataBank.b));
-                    DataBank.a = Convert.ToDouble(textBox1.Text);
-                    DataBank.code = 0;
-                    textBox2.Text = "";
-                    DataBank.IsRealNumber = false;
-                    DataBank.IsSqrt = false;
-                    DataBank.IsNegative = false;
-                }
+                return;
+            }
+            if (DataBank.code == -1 || DataBank.code == 0)
+            {
+                DataBank.a = Convert.ToDouble(textBox2.Text);
+                textBox1.Text = Convert.ToString(DataBank.a);
+                DataBank.code = 0;
+                textBox2.Text = "";
+                DataBank.IsRealNumber = false;
+                DataBank.IsSqrt = false;
+                DataBank.IsNegative = false;
+            }
+            else
+            {
+                DataBank.b = Convert.ToDouble(textBox2.Text);
+                textBox1.Text = Convert.ToString(math.action(DataBank.a, DataBank.b));
+                DataBank.a = Convert.ToDouble(textBox1.Text);
+                DataBank.code = 0;
+                textBox2.Text = "";
+                DataBank.IsRealNumber = false;
+                DataBank.IsSqrt = false;
+                DataBank.IsNegative = false;
             }
         }
 
         private void button_sqrt_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 0 || (textBox2.Text.Length == 1 && textBox2.Text[0] == '-'))
+            if (textBox2.Text.Length == 0 || !math.test(textBox2.Text))
             {
                 return;
             }
@@ -177,7 +178,7 @@ namespace Calculator
 
         private void button_percent_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 0 || (textBox2.Text.Length == 1 && textBox2.Text[0] == '-'))
+            if (textBox2.Text.Length == 0 || !math.test(textBox2.Text))
             {
                 return;
             }
@@ -190,7 +191,7 @@ namespace Calculator
 
         private void button_1_division_on_x_Click(object sender, EventArgs e)
         {
-            if (textBox2.Text.Length == 0 || (textBox2.Text.Length == 1 && textBox2.Text[0] == '-'))
+            if (textBox2.Text.Length == 0 || !math.test(textBox2.Text))
             {
                 return;
             }
@@ -391,6 +392,15 @@ namespace Calculator
         {
             e.Handled= true;
         }
+
+        private void button_comma_Click(object sender, EventArgs e)
+        {
+            if (!DataBank.IsRealNumber)
+            {
+                textBox2.Text += ',';
+                DataBank.IsRealNumber = true;
+            }
+        }
     }
     public static class math
     {
@@ -451,6 +461,17 @@ namespace Calculator
                     text2 = "";
                     DataBank.IsRealNumber = false;
                 }
+            }
+        }
+        public static bool test(string text)
+        {
+            if((text.Length == 1 && (text[0] == '-' || text[0] == ',')) || (text.Length == 2 && text[0] == '-' && text[1] == ','))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }
